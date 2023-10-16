@@ -1,0 +1,72 @@
+[gd_scene load_steps=4 format=3 uid="uid://djf0jt30kkddt"]
+
+[ext_resource type="PackedScene" uid="uid://dvmx0lfo4726q" path="res://objects/player.tscn" id="1_8i03h"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_r1etn"]
+[ext_resource type="AudioStream" uid="uid://bgrrpnmruk0h7" path="res://audio/Without Fear.ogg" id="3_gvl1u"]
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_r1etn")
+
+[node name="player" parent="." instance=ExtResource("1_8i03h")]
+position = Vector2(338, 553)
+
+[node name="asteroidTimer" type="Timer" parent="."]
+wait_time = 3.0
+
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_gvl1u")
+
+[node name="starTimer" type="Timer" parent="."]
+wait_time = 0.6
+autostart = true
+
+[node name="gameOver" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 640.0
+offset_bottom = 600.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="gameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.0
+offset_top = -30.5
+offset_right = 70.0
+offset_bottom = 30.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="gameOver/VBoxContainer"]
+layout_mode = 2
+text = "Você Perdeu!"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="gameOver/VBoxContainer"]
+layout_mode = 2
+text = "Jogar novamente"
+flat = true
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 642.0
+offset_bottom = 40.0
+
+[node name="score" type="Label" parent="HUD"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 5.0
+offset_right = 74.0
+offset_bottom = 31.0
+text = "score: 0"
+
+[connection signal="timeout" from="asteroidTimer" to="." method="_on_asteroid_timer_timeout"]
+[connection signal="finished" from="AudioPlayer" to="." method="_on_audio_player_finished"]
+[connection signal="timeout" from="starTimer" to="." method="_on_star_timer_timeout"]
+[connection signal="pressed" from="gameOver/VBoxContainer/Button" to="." method="_on_button_pressed"]
